@@ -5,7 +5,35 @@ Page({
      * 页面的初始数据
      */
     data: {
-        msg: 'xinrz'
+        msg: 'xinrz',
+        userInfo:{}
+    },
+    
+    handleParent(){
+        console.log('parent')
+    },
+    handleChildren(){
+        console.log('children')
+    },
+    getUserProfile(){
+        wx.getUserProfile({
+            desc: 'desc',
+            success: res => {
+                this.setData({
+                    userInfo: res.userInfo
+                })
+           },
+           fail: err => {
+               console.log(err.errMsg)
+           }
+          })
+    },
+
+    //跳转至logs页面
+    toLogs(){
+        wx.navigateTo({
+          url: '/pages/logs/logs',
+        })
     },
 
     /**
@@ -16,8 +44,19 @@ Page({
         console.log(this)
         this.setData({
             msg: 'zxr'
-        })
+        }),
+        wx.getUserInfo({
+            success: (res) => {
+                this.setData({
+                    userInfo: res.userInfo
+                })
+            },
+            fail: (err) => {
+                console.log(err.errMsg)
+            },
+          })
     },
+    
 
     /**
      * 生命周期函数--监听页面初次渲染完成
@@ -30,7 +69,6 @@ Page({
      * 生命周期函数--监听页面显示
      */
     onShow() {
-
     },
 
     /**

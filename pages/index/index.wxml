@@ -1,7 +1,16 @@
 <view class="indexContainer">
-  <image class="avatarUrl" src="/static/images/mycat.jpg"></image>
-  <text class="userName">{{msg}}</text>
-  <view class="goStudy">
-    <text>hello world</text>
+  <image wx:if="{{userInfo.language}}" class="avatarUrl" src="{{userInfo.avatarUrl}}"></image>
+  <button wx:else  bindtap="getUserProfile">获取用户信息</button>
+  <text wx:if="{{userInfo.language}}" class="userName">{{userInfo.nickName}}</text>
+
+  <!-- 事件绑定 -->
+  <!-- <view class="goStudy" bindtap="handleParent">
+    <text catchtap="handleChildren">hello world</text>
+  </view> --> 
+
+  <view class="goStudy" bindtap="toLogs">
+    <text >hello world</text>
   </view>
+
+
 </view>
