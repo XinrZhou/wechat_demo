@@ -1,62 +1,46 @@
-// pages/index/index.js
+import request from '../../utils/request'
 Page({
 
     /**
      * 页面的初始数据
      */
     data: {
-        msg: 'xinrz',
-        userInfo:{}
-    },
-    
-    handleParent(){
-        console.log('parent')
-    },
-    handleChildren(){
-        console.log('children')
-    },
-    getUserProfile(){
-        wx.getUserProfile({
-            desc: 'desc',
-            success: res => {
-                this.setData({
-                    userInfo: res.userInfo
-                })
-           },
-           fail: err => {
-               console.log(err.errMsg)
-           }
-          })
-    },
-
-    //跳转至logs页面
-    toLogs(){
-        wx.navigateTo({
-          url: '/pages/logs/logs',
-        })
+        bannerList:[], //轮播图数据
+        recommendList:[], //推荐歌单
+        topList:[] //排行榜
     },
 
     /**
      * 生命周期函数--监听页面加载
      */
-    onLoad(options) {
-        //this:代表当前页面的实例对象
-        console.log(this)
+    onLoad: async function() {
+        //获取轮播图数据
+        let bannerListData = await request('/banner',{type:2})
         this.setData({
-            msg: 'zxr'
-        }),
-        wx.getUserInfo({
-            success: (res) => {
-                this.setData({
-                    userInfo: res.userInfo
-                })
-            },
-            fail: (err) => {
-                console.log(err.errMsg)
-            },
-          })
+            bannerList: bannerListData.banners
+        })
+
+        //获取推荐歌单数据
+        let recommendListData = await request('/personalized',{limit:10})
+        this.setData({     
+            recommendList: recommendListData.result,
+        })
+
+        //获取排行榜数据
+        let index = 0
+        let resultArr = []
+        while(index < 5){
+            let topListData = await request('/top/list',{idx:index++})
+            let topListItem = {
+                name: topListData.playlist.name, 
+                tracks: topListData.playlist.tracks.slice(0,3)
+            }
+            resultArr.push(topListItem)
+            this.setData({
+                topList: resultArr
+            })
+        }        
     },
-    
 
     /**
      * 生命周期函数--监听页面初次渲染完成
@@ -69,6 +53,7 @@ Page({
      * 生命周期函数--监听页面显示
      */
     onShow() {
+
     },
 
     /**

@@ -1,11 +1,10 @@
 {
     "pages": [
-        "pages/index/index",
-        "pages/logs/logs"
+        "pages/index/index"
     ],
     "window": {
-        "navigationBarBackgroundColor": "#000",
+        "navigationBarBackgroundColor": "#d43c33",
         "navigationBarTextStyle": "white",
-        "navigationBarTitleText": "小程序"
+        "navigationBarTitleText": "云音乐"
     }
 }

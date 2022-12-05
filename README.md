@@ -57,3 +57,41 @@ getUserProfile(){
 ```
 wx.getUserInfo({})
 ```
+### 使用图标
+1. 阿里矢量图标库
+2. 添加入库-->生成链接-->复制css代码-->iconfont.wxss-->对应位置引入
+### 前后端交互
+1. wx.request()
+2. 注意点
+* 必须是https协议
+* 一个接口最多配置20个域名
+* 并发限制上限：10个
+* 开发中设置不校验合法域名：开发工具-->右上角详情-->本地设置-->不校验...
+3. 异步返回的是Promise实例
+### 自定义组件
+1. 在对应页面的.json文件中注册组件
+2. 组件复用：和Vue类似
+### 内网穿透
+1. 真机无法获取到本地服务器数据(http://localhost:3000)
+2. 解决：内网穿透
+* 外网穿透到内网
+* 下载uTools
+* 安装插件：https://github.com/lblblong/nat-utools/releases/tag/v1.2.3
+### 补充
+1.  文本溢出隐藏 省略号代替 
+* 单行
+```
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+```
+* 多行
+```
+    display: -webkit-box; /* 将对象作为弹性伸缩盒子模型显示 */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-box-orient: vertical;  /* 设置对其模式 */
+    -webkit-line-clamp: 2; /* 设置行数 */
+```
+
