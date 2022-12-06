@@ -2,6 +2,7 @@ let startY = 0 //手指起始坐标
 let moveY = 0  //手指移动坐标
 let moveDistance = 0 //手指移动距离
 
+import request from '../../utils/request'
 Page({
 
     /**
@@ -11,7 +12,8 @@ Page({
         //translate：CSS3新特性
         coverTransform:'translateY(0)',
         coverTransition:'',
-        userInfo:{}
+        userInfo:{},
+        recentPlayList:[] //最近播放记录
     },
 
     /**
@@ -19,12 +21,28 @@ Page({
      */
     onLoad(options) {
         //读取用户信息基本信息
-        let userInfo = wx.getStorageSync('userInfo')
+        let userInfo = JSON.parse(wx.getStorageSync('userInfo'))
         if(userInfo) {
             this.setData({
-                userInfo: JSON.parse(userInfo)
+                userInfo:userInfo
             })
         }
+
+        //获取用户播放记录
+        this.getUserRecentPlayList(userInfo.userId)
+
+    },
+
+    async getUserRecentPlayList(userId) {
+        let recentPlayListData = await request('/user/record',{uid:userId,type:1})
+        let index = 0
+        let recentPlayList = recentPlayListData.weekData.splice(0,10).map(item => {
+            item.id = index++
+            return item
+        })
+        this.setData({
+            recentPlayList
+        })
     },
 
     bindTouchStart(event){

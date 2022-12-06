@@ -86,11 +86,38 @@ bindinput="handleInput"
 ```
  <input id="phone" data-type="phone" type="text" placeholder="请输入手机号码" bindinput="handleInput"/>
 ```
+* 通过id向event传参的时候，如果传的是number，会自动转换成string
+* 通过data-XXX传递的时候，不会将number转成string
 4. alert是window对象的方法，小程序中要使用wx.showToast()
 ### 本地存储
 1. 语法：wx.setStorage || wx.setStorageSync
 2. 单个key允许存储的最大数据长度为1M，所有数据存储上限为10M
 3. Vue中数据存储：localStorage.setItem() || sessionStorage.setItem()  
+### 视频播放
+1. 需求：不允许两个视频同时播放
+2. 解决
+* video绑定播放事件，并设置id值
+```
+  <video 
+    src="{{item.urls[0].url}}" 
+    bindplay="handlePlay"
+    id="{{item.urls[0].id}}"
+  />
+ ```
+ * 播放事件的回调:播放/暂停时都会触发，单例模式实现
+```
+  handlePlay(event) {
+      let id = event.currentTarget.id
+      //this.id和this.videoContext均是上一个视频的信息
+      //将id、videoContext绑定到this上
+      this.id !== id && this.videoContext && this.videoContext.stop()
+      this.id = id
+      this.videoContext = wx.createVideoContext(id)
+  }
+```
+3. 性能优化：用<image></image>代替<video></video>
+* 用同一个id标识图片和视频
+* 如果所点图片id和视频id相等，显示video，隐藏image
 ### 补充
 1.  文本溢出隐藏 省略号代替 
 * 单行
@@ -114,4 +141,17 @@ bindinput="handleInput"
 ```
 transform 1s linear
 ```
+3. flex布局
+* flex-grow：可拉伸     flex-shrink：可压缩     flex-basis：当前元素宽度
+* flex：flex-grow:0, flex-shrink:1, flex-basis:auto
+* flex:1 flex-grow:1, flex-shrink:1, flex-basis:0%
+* flex:auto flex-grow:1, flex-shrink:1, flex-basis:auto
+* flex:1 会导致父元素的宽度自动为100%
+4. 右移零位会将非number强制转换成number
+```
+navId>>>0
+```
+5. JS Array.map方法内异步方法无法同步执行
+* 原因：map函数是同步执行的，所以循环每一项，到给新数组值时，都是同步操作
+* 解决：for循环代替/promise.all()
 
