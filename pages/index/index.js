@@ -5,41 +5,42 @@ Page({
      * 页面的初始数据
      */
     data: {
-        bannerList:[], //轮播图数据
-        recommendList:[], //推荐歌单
-        topList:[] //排行榜
+        bannerList: [], //轮播图数据
+        recommendList: [], //推荐歌单
+        topList: [] //排行榜
     },
 
     /**
      * 生命周期函数--监听页面加载
      */
-    onLoad: async function() {
+    onLoad: async function () {
         //获取轮播图数据
-        let bannerListData = await request('/banner',{type:2})
+        let bannerListData = await request('/banner', { type: 2 })
         this.setData({
             bannerList: bannerListData.banners
         })
 
         //获取推荐歌单数据
-        let recommendListData = await request('/personalized',{limit:10})
-        this.setData({     
+        let recommendListData = await request('/personalized', { limit: 10 })
+        this.setData({
             recommendList: recommendListData.result,
         })
 
         //获取排行榜数据
         let index = 0
         let resultArr = []
-        while(index < 5){
-            let topListData = await request('/top/list',{idx:index++})
+        let topListData = await request('/toplist/detail')
+        while (index < 4) {
             let topListItem = {
-                name: topListData.playlist.name, 
-                tracks: topListData.playlist.tracks.slice(0,3)
+                name: topListData.list[index].name,
+                imgUrl: topListData.list[index].coverImgUrl,
+                tracks: topListData.list[index++].tracks
             }
             resultArr.push(topListItem)
             this.setData({
                 topList: resultArr
             })
-        }        
+        }
     },
 
     /**
